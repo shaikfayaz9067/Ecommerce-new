@@ -1,0 +1,95 @@
+<!-- src/app/components/address/address.component.html -->
+<div class="address-container">
+  <h3>Select Shipping Address</h3>
+
+  <div *ngIf="addresses.length > 0; else noAddresses">
+    <div
+      *ngFor="let address of addresses"
+      class="address-card"
+      [class.selected]="address === selectedAddress"
+      (click)="selectAddress(address)"
+    >
+      <mat-card>
+        <mat-card-content>
+          <p>{{ address.street }}, {{ address.city }}</p>
+          <p>{{ address.state }}, {{ address.zipCode }}</p>
+          <p>{{ address.country }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <ng-template #noAddresses>
+    <p>No addresses available. Please add a new address.</p>
+  </ng-template>
+
+  <button mat-button color="primary" (click)="addNewAddress()">
+    Add New Address
+  </button>
+
+  <!-- New Address Form -->
+  <div *ngIf="showNewAddressForm" class="new-address-form">
+    <mat-card>
+      <mat-card-content>
+        <h4>Enter New Address</h4>
+        <form (ngSubmit)="submitNewAddress()">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Street</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newAddress.street"
+              name="street"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>City</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newAddress.city"
+              name="city"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>State</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newAddress.state"
+              name="state"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Zip Code</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newAddress.zipCode"
+              name="zipCode"
+              required
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Country</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newAddress.country"
+              name="country"
+              required
+            />
+          </mat-form-field>
+
+          <div class="d-grid gap-2">
+            <button mat-raised-button color="primary" type="submit">
+              Save Address
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

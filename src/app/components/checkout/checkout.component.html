@@ -4,16 +4,51 @@
       <mat-card>
         <mat-card-content>
           <h4 class="text-center">Checkout</h4>
-          <form (submit)="placeOrder()">
+
+          <!-- Address Component to Display All Addresses -->
+          <app-address
+            (addressSelected)="selectAddress($event)"
+            [addresses]="addresses"
+          ></app-address>
+
+          <!-- Button to Add New Address -->
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="showAddressForm = true"
+          >
+            Add New Shipping Address
+          </button>
+
+          <!-- New Address Form -->
+          <div *ngIf="showAddressForm">
             <mat-form-field appearance="fill" class="mb-3 w-100">
-              <mat-label>Shipping Address</mat-label>
-              <textarea
-                matInput
-                id="address"
-                [(ngModel)]="address"
-                required
-              ></textarea>
+              <mat-label>Street</mat-label>
+              <input matInput [(ngModel)]="newAddressInput" required />
             </mat-form-field>
+
+            <mat-form-field appearance="fill" class="mb-3 w-100">
+              <mat-label>City</mat-label>
+              <input matInput [(ngModel)]="newCityInput" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="mb-3 w-100">
+              <mat-label>State</mat-label>
+              <input matInput [(ngModel)]="newStateInput" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="mb-3 w-100">
+              <mat-label>Zip Code</mat-label>
+              <input matInput [(ngModel)]="newZipCodeInput" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="mb-3 w-100">
+              <mat-label>Country</mat-label>
+              <input matInput [(ngModel)]="newCountryInput" required />
+            </mat-form-field>
+          </div>
+
+          <form (submit)="placeOrder()">
             <div class="d-grid">
               <button mat-raised-button color="success" type="submit">
                 Place Order

@@ -1,0 +1,27 @@
+/* src/app/components/address/address.component.css */
+.address-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.address-card {
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.address-card.selected mat-card {
+  background-color: #e0f7fa;
+  border: 2px solid #00796b;
+}
+
+.address-card mat-card {
+  padding: 10px;
+}
+
+.new-address-form {
+  width: 100%;
+  margin-top: 20px;
+}

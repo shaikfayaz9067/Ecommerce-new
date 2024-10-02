@@ -15,3 +15,9 @@ export interface Product {
     price: number;
   };
 }
+
+export interface CartItem {
+  productId: string; // Only store the ID
+  quantity: number; // Keep track of quantity in the cart
+  userId: string;
+}
