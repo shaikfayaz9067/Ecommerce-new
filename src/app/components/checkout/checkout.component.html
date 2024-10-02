@@ -1,0 +1,27 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <mat-card>
+        <mat-card-content>
+          <h4 class="text-center">Checkout</h4>
+          <form (submit)="placeOrder()">
+            <mat-form-field appearance="fill" class="mb-3 w-100">
+              <mat-label>Shipping Address</mat-label>
+              <textarea
+                matInput
+                id="address"
+                [(ngModel)]="address"
+                required
+              ></textarea>
+            </mat-form-field>
+            <div class="d-grid">
+              <button mat-raised-button color="success" type="submit">
+                Place Order
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="container mt-5">
+  <div *ngIf="cartItems.length > 0; else emptyCart">
+    <h2>Your Cart</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let product of cartItems">
+        <mat-card class="h-100">
+          <img mat-card-image [src]="product.image" alt="Product Image" />
+          <mat-card-content>
+            <h5 mat-card-title>{{ product.name }}</h5>
+            <p mat-card-subtitle>Price: {{ product.price | currency }}</p>
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="removeFromCart(product.id)"
+            >
+              Remove
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <button mat-raised-button color="primary" routerLink="/checkout">
+      Proceed to Checkout
+    </button>
+  </div>
+  <ng-template #emptyCart>
+    <p class="text-center mt-4">Your cart is empty.</p>
+  </ng-template>
+</div>

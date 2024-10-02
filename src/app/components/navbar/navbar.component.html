@@ -1,0 +1,9 @@
+<mat-toolbar color="primary">
+  <a mat-button routerLink="/home">Home</a>
+  <a mat-button routerLink="/add-to-cart" *ngIf="authService.isLoggedIn()"
+    >Cart</a
+  >
+  <a mat-button routerLink="/checkout" *ngIf="authService.isLoggedIn()"
+    >Checkout</a
+  >
+</mat-toolbar>

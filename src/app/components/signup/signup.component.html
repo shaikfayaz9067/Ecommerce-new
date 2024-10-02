@@ -1,0 +1,46 @@
+<div class="container mt-5">
+  <mat-card>
+    <mat-card-header>
+      <h4 class="text-center">Sign Up</h4>
+    </mat-card-header>
+    <mat-card-content>
+      <form (submit)="signup()">
+        <mat-form-field appearance="fill" class="mb-3">
+          <mat-label>Full Name</mat-label>
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="username"
+            required
+            name="name"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="mb-3">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            [(ngModel)]="email"
+            required
+            name="email"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="mb-3">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="password"
+            required
+            name="password"
+          />
+        </mat-form-field>
+        <div class="d-grid">
+          <button mat-raised-button color="primary" type="submit">
+            Sign Up
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
