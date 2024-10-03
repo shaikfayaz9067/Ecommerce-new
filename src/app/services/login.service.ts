@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { User } from '../models/user'; // Import your User interface
 
 @Injectable({
@@ -12,17 +12,12 @@ export class LoginService {
 
   constructor(private http: HttpClient) {}
 
-  // Fetch users and validate username and password
+  // Use GET to login by passing username and password in the URL
   login(username: string, password: string): Observable<User | null> {
-    return this.http.get<User[]>(`${this.apiUrl}`).pipe(
-      map((users) => {
-        const user = users.find(
-          (user) => user.username === username && user.password === password
-        );
-        return user || null; // Return the user object or null
-      }),
+    const url = `${this.apiUrl}/login/${username}?password=${password}`; // Build the URL
+    return this.http.get<User>(url).pipe(
       catchError((error) => {
-        console.error('Error fetching users:', error);
+        console.error('Error during login:', error);
         return of(null); // Return null on error
       })
     );
@@ -30,7 +25,6 @@ export class LoginService {
 
   // Method to handle user signup (POST)
   signup(userData: User): Observable<User | null> {
-    // Change the return type to include null
     return this.http.post<User>(`${this.apiUrl}/signup`, userData).pipe(
       catchError((error) => {
         console.error('Error during signup:', error);

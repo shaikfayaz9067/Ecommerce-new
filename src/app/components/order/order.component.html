@@ -1,1 +1,25 @@
-<p>order works!</p>
+<div class="container mt-5">
+  <h2>Your Orders</h2>
+
+  <div *ngIf="orders.length > 0; else noOrders">
+    <div *ngFor="let order of orders" class="mb-4">
+      <mat-card class="h-100">
+        <mat-card-content>
+          <h5 mat-card-title>Order ID: {{ order.id }}</h5>
+          <p mat-card-subtitle>Status: {{ order.status }}</p>
+          <h6>Items:</h6>
+          <ul>
+            <li *ngFor="let item of order.items">
+              Product ID: {{ item.productId }} | Quantity: {{ item.quantity }} | Price: {{ item.price | currency }}
+            </li>
+          </ul>
+          <h6>Total: {{ getTotalPrice(order.items) | currency }}</h6>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <ng-template #noOrders>
+    <p class="text-center mt-4">You have no orders.</p>
+  </ng-template>
+</div>

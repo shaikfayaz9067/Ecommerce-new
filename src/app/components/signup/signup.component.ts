@@ -9,7 +9,7 @@ import { LoginService } from 'src/app/services/login.service';
   styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent {
-  name: string = '';
+  username: string = '';
   email: string = '';
   password: string = '';
   phoneNumber: string = '';
@@ -23,10 +23,10 @@ export class SignupComponent {
 
   // Method called when the form is submitted
   signup() {
-    if (this.name && this.email && this.password) {
+    if (this.username && this.email && this.password) {
       // Prepare the user data
       const userData = {
-        username: this.name,
+        username: this.username,
         email: this.email,
         password: this.password,
         phoneNumber: this.phoneNumber,

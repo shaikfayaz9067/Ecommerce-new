@@ -1,14 +1,19 @@
 <mat-card class="h-100">
   <a [routerLink]="['/product', product.id]">
-    <img mat-card-image [src]="product.image" alt="Product Image" />
+    <img
+      mat-card-image
+      [src]="'data:image/jpeg;base64,' + product.image"
+      alt="Product Image"
+      style="width: 100px; height: auto"
+    />
   </a>
   <mat-card-content>
     <h5 mat-card-title>{{ product.category.name }}</h5>
-    <p mat-card-subtitle>Price: {{ product.price | currency }}</p>
+    <p mat-card-subtitle>Price: {{ product.price | currency : "INR" }}</p>
     <button
       mat-raised-button
       color="primary"
-      (click)="addToCart()"
+      (click)="addToCart(1)"
       *ngIf="authService.isLoggedIn()"
     >
       Add to Cart

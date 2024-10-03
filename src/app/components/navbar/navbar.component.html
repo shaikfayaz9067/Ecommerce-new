@@ -6,4 +6,22 @@
   <a mat-button routerLink="/checkout" *ngIf="authService.isLoggedIn()"
     >Checkout</a
   >
+
+  <!-- Spacer to push login/signup to the right -->
+
+  <!-- Additional links -->
+  <a mat-button routerLink="/order" *ngIf="authService.isLoggedIn()">Orders</a>
+  <a mat-button routerLink="/address" *ngIf="authService.isLoggedIn()"
+    >Address</a
+  >
+  <span class="spacer"></span>
+
+  <!-- Show Login/Signup when not logged in -->
+  <a mat-button routerLink="/login" *ngIf="!authService.isLoggedIn()">Login</a>
+  <a mat-button routerLink="/signup" *ngIf="!authService.isLoggedIn()"
+    >Signup</a
+  >
+
+  <!-- Show Logout when logged in -->
+  <a mat-button (click)="logout()" *ngIf="authService.isLoggedIn()">Logout</a>
 </mat-toolbar>

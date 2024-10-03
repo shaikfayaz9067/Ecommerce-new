@@ -9,6 +9,7 @@ export interface Product {
   price: number;
   totalPrice: number;
   image: string;
+  description: string;
   subcategory: {
     name: string;
     subname: string; // This field was missing in the previous examples

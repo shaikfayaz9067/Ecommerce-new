@@ -1,5 +1,4 @@
-// src/app/components/address/address.component.ts
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { AddressService } from '../../services/address.service';
 import { Address } from '../../models/address';
 
@@ -9,8 +8,8 @@ import { Address } from '../../models/address';
   styleUrls: ['./address.component.css'],
 })
 export class AddressComponent implements OnInit {
+  @Input() addresses: Address[] = []; // Allow addresses to be passed in from parent
   @Output() addressSelected = new EventEmitter<Address | null>();
-  addresses: Address[] = [];
   selectedAddress: Address | null = null;
   showNewAddressForm: boolean = false;
   newAddress: Partial<Address> = {
@@ -24,15 +23,7 @@ export class AddressComponent implements OnInit {
   constructor(private addressService: AddressService) {}
 
   ngOnInit(): void {
-    const userId = 'currentUserId'; // Replace with actual userId, e.g., from AuthService
-    this.addressService.getAddressesByUserId(userId).subscribe(
-      (data: Address[]) => {
-        this.addresses = data;
-      },
-      (error) => {
-        console.error('Error fetching addresses:', error);
-      }
-    );
+    // This part may be redundant since addresses are passed from the parent
   }
 
   selectAddress(address: Address): void {

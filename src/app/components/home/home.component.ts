@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service'; // Import your product service
 import { AuthService } from '../../services/auth.service'; // Import your authentication service
-import { Product } from '../../models/product';
+import { CartItem, Product } from '../../models/product';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    public authService: AuthService // Inject AuthService to check login status
+    public authService: AuthService, // Inject AuthService to check login status
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -41,20 +43,35 @@ export class HomeComponent implements OnInit {
   }
 
   // Method to handle adding a product to the cart
-  addToCart(productId: string): void {
+  // Updated method in HomeComponent
+  addToCart(cartData: { productId: string; quantity: number }): void {
     if (this.authService.isLoggedIn()) {
-      this.productService.addToCart(productId).subscribe(
-        () => {
-          console.log(`Product ${productId} added to cart successfully`);
-          // Optionally provide feedback to the user, e.g., a toast message
-        },
-        (error) => {
-          console.error(`Error adding product to cart:`, error);
-        }
-      );
+      const userId = this.authService.getUser()?.id || ''; // Get the logged-in user's ID
+
+      if (userId) {
+        const cartItem: CartItem = {
+          productId: cartData.productId,
+          quantity: cartData.quantity,
+          userId: userId, // Ensure this is also a string
+        };
+        this.productService
+          .addToCart(cartData.productId, cartData.quantity, userId)
+          .subscribe(
+            () => {
+              console.log(
+                `Product ${cartData.productId} added to cart successfully`
+              );
+            },
+            (error) => {
+              console.error(`Error adding product to cart:`, error);
+            }
+          );
+      } else {
+        console.error('Unable to retrieve user ID for adding to cart.');
+      }
     } else {
-      console.log('User not logged in. Redirect to login page.');
-      // Optionally redirect to the login page if the user is not logged in
+      console.log('User not logged in. Redirecting to login page.');
+      this.router.navigate(['/login']);
     }
   }
 }

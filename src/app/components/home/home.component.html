@@ -1,30 +1,18 @@
 <div class="container mt-5">
-  <div class="row mb-4">
-    <div class="col-md-8 mx-auto">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Search products"
-        (input)="search($event)"
-      />
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4 mb-4" *ngFor="let product of products">
-      <div class="card h-100">
-        <img class="card-img-top" [src]="product.image" alt="Product Image" />
-        <div class="card-body">
-          <h5 class="card-title">{{ product.category.name }}</h5>
-          <p class="card-text">Price: {{ product.price }}</p>
-          <button
-            class="btn btn-primary"
-            *ngIf="authService.isLoggedIn()"
-            (click)="addToCart(product.id)"
-          >
-            Add to Cart
-          </button>
-        </div>
-      </div>
-    </div>
+  <mat-form-field appearance="fill" class="mb-4">
+    <mat-label>Search products</mat-label>
+    <input matInput (input)="search($event)" />
+  </mat-form-field>
+
+  <div class="d-flex flex-wrap">
+    <!-- Use flexbox to wrap items -->
+    <app-product-card
+      *ngFor="let product of filteredProducts"
+      [product]="product"
+      (addToCartEvent)="addToCart($event)"
+      class="flex-item"
+    >
+      <!-- Add class for styling -->
+    </app-product-card>
   </div>
 </div>

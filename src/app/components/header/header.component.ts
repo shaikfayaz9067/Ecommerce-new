@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../services/auth.service'; // Assuming you have an auth service
+import { AuthService } from '../../services/auth.service'; // Assuming you have an auth service
 
 @Component({
   selector: 'app-header',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
-import { Order } from '../../models/order';
+import { Order, OrderItem } from '../../models/order';
 import { AuthService } from '../../services/auth.service'; // Assuming AuthService exists
 
 @Component({
@@ -42,5 +42,8 @@ export class OrderComponent implements OnInit {
         console.error('Error fetching orders:', error);
       }
     );
+  }
+  getTotalPrice(items: OrderItem[]): number {
+    return items.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 }

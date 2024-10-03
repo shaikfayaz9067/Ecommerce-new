@@ -9,13 +9,19 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ProductCardComponent {
   @Input() product!: Product; // Input property for the product
-  @Output() addToCartEvent = new EventEmitter<string>(); // Output event to notify when adding to cart
+  @Output() addToCartEvent = new EventEmitter<{
+    productId: string;
+    quantity: number;
+  }>(); // Emit both productId and quantity
 
-  // Change authService to public
   constructor(public authService: AuthService) {}
 
   // Method to handle click event on Add to Cart button
-  addToCart() {
-    this.addToCartEvent.emit(this.product.id); // Emit the product ID
+  addToCart(quantity: number = 1) {
+    const cartData = {
+      productId: this.product.id, // Emit the product ID
+      quantity: quantity, // Emit the quantity
+    };
+    this.addToCartEvent.emit(cartData); // Emit both productId and quantity
   }
 }

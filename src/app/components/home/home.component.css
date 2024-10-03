@@ -1,0 +1,25 @@
+/* styles.css or home.component.css */
+
+.d-flex {
+  display: flex; /* Enable flexbox */
+  flex-wrap: wrap; /* Allow items to wrap */
+  justify-content: space-between; /* Align items with space between */
+}
+
+.flex-item {
+  flex: 0 1 calc(33.33% - 20px); /* Adjust the width of each item */
+  margin: 10px; /* Add margin around items */
+}
+
+/* Optional: To make it responsive, adjust the width for smaller screens */
+@media (max-width: 768px) {
+  .flex-item {
+    flex: 0 1 calc(50% - 20px); /* 2 items per row on small screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .flex-item {
+    flex: 0 1 calc(100% - 20px); /* 1 item per row on extra small screens */
+  }
+}
