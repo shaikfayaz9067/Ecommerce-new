@@ -44,4 +44,12 @@ export class ProductService {
       `${this.cartUrl}/${productId}?userId=${userId}`
     ); // Remove based on userId and productId
   }
+
+  getProductById(productId: string) {
+    return this.http.get<Product>(`${this.apiUrl}/${productId}`);
+  }
+
+  deleteCartItems(userId: string): Observable<void> {
+    return this.http.delete<void>(`${this.cartUrl}?userId=${userId}`);
+  }
 }

@@ -5,10 +5,19 @@
       <div class="col-md-4 mb-4" *ngFor="let item of cartItems">
         <ng-container *ngIf="getProductDetails(item.productId) as product">
           <mat-card class="h-100">
-            <img mat-card-image [src]="product.image" alt="Product Image" />
+            <a [routerLink]="['/product', product.id]">
+              <img
+                mat-card-image
+                [src]="'data:image/jpeg;base64,' + product.image"
+                alt="Product Image"
+                style="width: 100px; height: auto"
+              />
+            </a>
             <mat-card-content>
               <h5 mat-card-title>{{ product.category.name }}</h5>
-              <p mat-card-subtitle>Price: {{ product.price | currency }}</p>
+              <p mat-card-subtitle>
+                Price: {{ product.price | currency : "INR" }}
+              </p>
               <p mat-card-subtitle>Quantity: {{ item.quantity }}</p>
               <button
                 mat-raised-button

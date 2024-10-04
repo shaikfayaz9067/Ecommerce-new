@@ -1,0 +1,29 @@
+.flex-container {
+  display: flex;
+  flex-direction: row; /* Change to row for side-by-side layout */
+  gap: 20px; /* Space between products and address */
+}
+
+.products-container {
+  flex: 2; /* Allow the products section to take more space */
+}
+
+.address-container {
+  flex: 1; /* Address section takes less space */
+}
+
+.products-list {
+  display: flex; /* Use flex to display products side by side */
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  gap: 15px; /* Space between product cards */
+}
+
+.product-card {
+  flex: 1 1 200px; /* Flex-grow, flex-shrink, and base width for responsiveness */
+  max-width: 250px; /* Maximum width for product cards */
+}
+
+.product-image {
+  width: 100px; /* Maintain product image size */
+  height: auto; /* Auto height for aspect ratio */
+}

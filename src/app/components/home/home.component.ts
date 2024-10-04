@@ -58,6 +58,7 @@ export class HomeComponent implements OnInit {
           .addToCart(cartData.productId, cartData.quantity, userId)
           .subscribe(
             () => {
+              this.router.navigate(['add-to-cart']);
               console.log(
                 `Product ${cartData.productId} added to cart successfully`
               );

@@ -1,0 +1,68 @@
+.mat-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h6 {
+  margin-top: 10px;
+}
+
+.container {
+  max-width: 1200px; /* Limit container width for better readability */
+  margin: auto; /* Center the container */
+  padding: 20px; /* Add padding for spacing */
+}
+
+h2 {
+  text-align: center; /* Center align the main heading */
+  margin-bottom: 30px; /* Space below the heading */
+}
+
+.mat-card {
+  border: 1px solid #e0e0e0; /* Add a light border to the card */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.mat-card-content {
+  padding: 20px; /* Increase padding inside the card */
+}
+
+.row {
+  display: flex; /* Use flexbox for alignment */
+  justify-content: space-between; /* Space between left and right sections */
+}
+
+.col-md-8 {
+  flex: 0 0 66.67%; /* Ensure left column takes 2/3 of the space */
+  padding-right: 15px; /* Add spacing between columns */
+}
+
+.col-md-4 {
+  flex: 0 0 33.33%; /* Ensure right column takes 1/3 of the space */
+}
+
+h5,
+h6 {
+  margin: 0 0 10px 0; /* Adjust margin for headings */
+}
+
+p {
+  margin: 5px 0; /* Adjust paragraph spacing */
+}
+
+ul {
+  list-style-type: none; /* Remove default list styling */
+  padding-left: 0; /* Remove default padding */
+}
+
+li {
+  margin-bottom: 5px; /* Space between list items */
+}
+
+.text-center {
+  text-align: center; /* Center align text for no orders message */
+}
+
+.mb-4 {
+  margin-bottom: 30px; /* Increased bottom margin for spacing between orders */
+}

@@ -5,15 +5,32 @@
     <div *ngFor="let order of orders" class="mb-4">
       <mat-card class="h-100">
         <mat-card-content>
-          <h5 mat-card-title>Order ID: {{ order.id }}</h5>
-          <p mat-card-subtitle>Status: {{ order.status }}</p>
-          <h6>Items:</h6>
-          <ul>
-            <li *ngFor="let item of order.items">
-              Product ID: {{ item.productId }} | Quantity: {{ item.quantity }} | Price: {{ item.price | currency }}
-            </li>
-          </ul>
-          <h6>Total: {{ getTotalPrice(order.items) | currency }}</h6>
+          <div class="row">
+            <div class="col-md-8">
+              <!-- Left side for Order details -->
+              <h5 mat-card-title>Order ID: {{ order.id }}</h5>
+              <p mat-card-subtitle>Status: {{ order.status }}</p>
+              <h6>Items:</h6>
+              <ul>
+                <li *ngFor="let item of order.items">
+                  Product ID: {{ item.productId }} | Quantity:
+                  {{ item.quantity }} | Price: {{ item.price | currency }}
+                </li>
+              </ul>
+              <h6>Total: {{ getTotalPrice(order.items) | currency }}</h6>
+            </div>
+            <div class="col-md-4">
+              <!-- Right side for Shipping Address -->
+              <h6>Shipping Address:</h6>
+              <p>
+                {{ order.shippingAddress.street }}<br />
+                {{ order.shippingAddress.city }},
+                {{ order.shippingAddress.state }}
+                {{ order.shippingAddress.zipCode }}<br />
+                {{ order.shippingAddress.country }}
+              </p>
+            </div>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>

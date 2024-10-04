@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
-import { AddressService } from '../../services/address.service'; // Assuming AddressService exists
+import { AddressService } from '../../services/address.service';
+import { ProductService } from '../../services/product.service';
+import { AuthService } from '../../services/auth.service';
 import { Address } from '../../models/address';
 import { Order, OrderItem } from '../../models/order';
-import { AuthService } from '../../services/auth.service'; // Assuming AuthService exists
+import { CartItem } from '../../models/product';
+import { Product } from '../../models/product';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -11,86 +16,181 @@ import { AuthService } from '../../services/auth.service'; // Assuming AuthServi
   styleUrls: ['./checkout.component.css'],
 })
 export class CheckoutComponent implements OnInit {
-  addresses: Address[] = []; // Store addresses fetched from the service
+  addresses: Address[] = [];
   selectedAddress: Address | null = null;
-  orderItems: OrderItem[] = []; // Populate from cart
-  totalAmount: number = 0; // Calculate from cart
-  userId: string = ''; // Get from AuthService
-  showAddressForm: boolean = false; // Flag to show/hide new address form
-
-  // New address input fields
-  newAddressInput: string = '';
-  newCityInput: string = '';
-  newStateInput: string = '';
-  newZipCodeInput: string = '';
-  newCountryInput: string = '';
+  cartItems: CartItem[] = [];
+  orderItems: OrderItem[] = [];
+  products: Product[] = [];
+  totalAmount: number = 0;
+  userId: string = '';
+  showAddressForm: boolean = false;
 
   constructor(
     private orderService: OrderService,
     private addressService: AddressService,
-    private authService: AuthService
+    private productService: ProductService,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.authService.getUser()?.id || ''; // Replace with actual method to get userId
+    this.userId = this.authService.getUser()?.id || '';
 
     // Fetch user's addresses
-    this.addressService
-      .getAddressesByUserId(this.userId)
-      .subscribe((addresses: Address[]) => {
+    this.addressService.getAddressesByUserId(this.userId).subscribe(
+      (addresses: Address[]) => {
         this.addresses = addresses;
-      });
+      },
+      (error) => {
+        console.error('Error fetching addresses:', error);
+      }
+    );
 
-    // Fetch cart items and calculate totalAmount
-    this.orderItems = this.getCartItems();
-    this.totalAmount = this.calculateTotalAmount();
+    // Fetch cart items from the API
+    this.productService.getCartItems(this.userId).subscribe(
+      (cartItems: CartItem[]) => {
+        this.cartItems = cartItems;
+        this.loadOrderItems();
+      },
+      (error) => {
+        console.error('Error fetching cart items:', error);
+      }
+    );
   }
 
+  loadOrderItems(): void {
+    // Ensure order items are loaded and the total amount is calculated
+    this.cartItems.forEach((item) => {
+      this.productService.getProductById(item.productId).subscribe(
+        (product: Product) => {
+          this.products.push(product); // Add to products array for display
+          this.orderItems.push({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: product.price, // Assign product price
+          });
+
+          // Recalculate the total amount
+          this.totalAmount = this.calculateTotalAmount();
+        },
+        (error) => {
+          console.error('Error fetching product details:', error);
+        }
+      );
+    });
+  }
+
+  // Get the quantity of a product in the cart
+  getCartQuantity(productId: string): number {
+    const cartItem = this.cartItems.find(
+      (item) => item.productId === productId
+    );
+    return cartItem ? cartItem.quantity : 0;
+  }
+
+  // Update selected address from AddressComponent
   selectAddress(address: Address | null): void {
     this.selectedAddress = address;
   }
 
   placeOrder(): void {
-    const shippingAddress: Address = this.selectedAddress || {
-      id: '', // You may want to generate an ID or leave it empty if it's new
-      userId: this.userId,
-      street: this.newAddressInput,
-      city: this.newCityInput,
-      state: this.newStateInput,
-      zipCode: this.newZipCodeInput,
-      country: this.newCountryInput,
-    };
+    // Validate that an address has been selected
+    if (!this.selectedAddress) {
+      this.snackBar.open(
+        'Please select or enter a valid shipping address.',
+        'Close',
+        {
+          duration: 3000,
+          verticalPosition: 'top',
+        }
+      );
+      return;
+    }
 
+    // Ensure that order items and total amount are properly calculated
+    if (this.orderItems.length === 0 || this.totalAmount === 0) {
+      this.snackBar.open(
+        'Your cart is empty or the total amount is incorrect.',
+        'Close',
+        {
+          duration: 3000,
+          verticalPosition: 'top',
+        }
+      );
+      return;
+    }
+
+    // Construct the order data
     const orderData: Order = {
       userId: this.userId,
       items: this.orderItems,
       totalAmount: this.totalAmount,
       status: 'pending',
-      shippingAddress: shippingAddress,
+      shippingAddress: this.selectedAddress, // Ensure the selected address is passed
     };
 
+    // Place order by making the API call
     this.orderService.placeOrder(orderData).subscribe(
       (response) => {
         console.log('Order placed successfully', response);
-        alert('Order placed successfully!');
+        this.snackBar.open('Order placed successfully!', 'Close', {
+          duration: 3000,
+          verticalPosition: 'top',
+          panelClass: ['snackbar-success'], // Optional: Custom styling
+        });
+        this.deleteCartItems();
       },
+
       (error) => {
         console.error('Error placing order', error);
-        alert('There was an error placing your order. Please try again.');
+        this.snackBar.open(
+          'There was an error placing your order. Please try again.',
+          'Close',
+          {
+            duration: 3000,
+            verticalPosition: 'top',
+            panelClass: ['snackbar-error'], // Optional: Custom styling
+          }
+        );
       }
     );
   }
 
-  // Placeholder for fetching cart items
-  private getCartItems(): OrderItem[] {
-    // Replace with actual logic to fetch cart items from a service
-    return [
-      { productId: 'prod1', quantity: 2, price: 50 },
-      { productId: 'prod2', quantity: 1, price: 30 },
-    ];
+  deleteCartItems(): void {
+    // Call the service to delete all items in the cart for this user
+    this.productService.deleteCartItems(this.userId).subscribe(
+      (response) => {
+        console.log('Cart items deleted successfully', response);
+
+        // Show success message
+        this.snackBar.open('Cart items deleted successfully!', 'Close', {
+          duration: 3000,
+          verticalPosition: 'top',
+          panelClass: ['snackbar-success'],
+        });
+
+        // Delay navigation to the order page
+        setTimeout(() => {
+          this.router.navigate(['/order']);
+        }, 3000); // Delay of 3000 milliseconds (3 seconds)
+      },
+      (error) => {
+        console.error('Error deleting cart items', error);
+        this.snackBar.open(
+          'There was an error deleting your cart items. Please try again.',
+          'Close',
+          {
+            duration: 3000,
+            verticalPosition: 'top',
+            panelClass: ['snackbar-error'],
+          }
+        );
+      }
+    );
   }
 
-  // Placeholder for calculating total amount
+  // Calculate total amount
   private calculateTotalAmount(): number {
     return this.orderItems.reduce(
       (acc, item) => acc + item.quantity * item.price,

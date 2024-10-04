@@ -9,9 +9,9 @@ import { OrderComponent } from './components/order/order.component';
 import { AddressComponent } from './components/address/address.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' }, // Redirect to home on empty path
-  { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' }, // Redirect to home on empty path
   { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'add-to-cart', component: AddToCartComponent },

@@ -13,6 +13,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // Import Angular Material modules
 import { MatCardModule } from '@angular/material/card'; // For mat-card
@@ -48,6 +49,7 @@ import { AddressComponent } from './components/address/address.component';
     MatInputModule, // Include Material Input Module
     MatToolbarModule, // Include Material Toolbar Module
     HttpClientModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

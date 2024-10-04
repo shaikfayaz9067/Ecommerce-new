@@ -22,27 +22,44 @@ export class AddressComponent implements OnInit {
 
   constructor(private addressService: AddressService) {}
 
-  ngOnInit(): void {
-    // This part may be redundant since addresses are passed from the parent
-  }
+  ngOnInit(): void {}
 
   selectAddress(address: Address): void {
     this.selectedAddress = address;
     this.showNewAddressForm = false;
-    this.addressSelected.emit(address);
+    this.addressSelected.emit(address); // Emit selected address
   }
 
   addNewAddress(): void {
     this.selectedAddress = null;
     this.showNewAddressForm = true;
-    this.addressSelected.emit(null); // Indicates that a new address is being added
+    this.addressSelected.emit(null); // Emit null to indicate new address is being added
   }
 
   submitNewAddress(): void {
-    const userId = 'currentUserId'; // Replace with actual userId
+    // Retrieve the user object from localStorage
+    const userFromStorage = localStorage.getItem('user');
+
+    let userId: string; // Declare userId as a string
+
+    if (userFromStorage) {
+      const user = JSON.parse(userFromStorage); // Parse the stored user object
+
+      // Check if user object has an id
+      if (user && user.id) {
+        userId = user.id; // Assign userId from the user object
+      } else {
+        console.error('User ID is not available');
+        return; // Exit if userId is not found
+      }
+    } else {
+      console.error('No user found in local storage');
+      return; // Exit if no user found
+    }
+
+    // Create the address object with userId
     const addressToAdd: Address = {
-      id: '', // Backend should generate ID
-      userId: userId,
+      userId: userId, // userId is guaranteed to be a string
       street: this.newAddress.street!,
       city: this.newAddress.city!,
       state: this.newAddress.state!,
@@ -50,24 +67,30 @@ export class AddressComponent implements OnInit {
       country: this.newAddress.country!,
     };
 
+    console.log('Submitting new address:', addressToAdd); // Log the address being submitted
+
     this.addressService.addAddress(addressToAdd).subscribe(
       (addedAddress: Address) => {
+        console.log('Address added successfully:', addedAddress); // Log the response
         this.addresses.push(addedAddress);
-        this.selectedAddress = addedAddress;
-        this.showNewAddressForm = false;
-        this.addressSelected.emit(addedAddress);
-        // Reset newAddress fields
-        this.newAddress = {
-          street: '',
-          city: '',
-          state: '',
-          zipCode: '',
-          country: '',
-        };
+        this.selectedAddress = addedAddress; // Set the newly added address as selected
+        this.showNewAddressForm = false; // Hide the new address form
+        this.addressSelected.emit(addedAddress); // Emit the new address
+        this.resetNewAddress(); // Reset the new address fields
       },
       (error) => {
-        console.error('Error adding new address:', error);
+        console.error('Error adding new address:', error); // Log any errors
       }
     );
+  }
+
+  resetNewAddress(): void {
+    this.newAddress = {
+      street: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: '',
+    };
   }
 }
